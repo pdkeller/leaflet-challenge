@@ -11,13 +11,13 @@ function createFeatures(earthquakeData) {
 
   // Define a function that we want to run once for each feature in the features array.
   // Give each feature a popup that describes the place and time of the earthquake.
-  function onEachFeature(feature, layer) {
-    layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><h3>Magnitude: ${feature.properties.mag}</h3><hr><h3>Depth: ${feature.geometry.coordinates[2]}</h3>`);
-  }
+  // function onEachFeature(feature, layer) {
+  //   layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><h3>Magnitude: ${feature.properties.mag}</h3><hr><h3>Depth: ${feature.geometry.coordinates[2]}</h3>`);
+  // }
 
   // Define a function for the size of the marker.
   function markerSize(magnitude) {
-    return Math.sqrt(magnitude) * 50;
+    return Math.sqrt(magnitude.properties.mag) * 50;
   }
 
   // Define a function for the color of the marker.
@@ -28,7 +28,7 @@ function createFeatures(earthquakeData) {
   // Create a GeoJSON layer that contains the features array on the earthquakeData object.
   // Run the onEachFeature function once for each piece of data in the array.
   let earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature,
+    //onEachFeature: onEachFeature,
     markerSize: markerSize,
     markerColor: markerColor
   });
