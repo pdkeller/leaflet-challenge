@@ -1,29 +1,10 @@
  // Create the base layers.
-// let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-// })
-
-// let topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-//     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-// });
-
 let basemap = L.tileLayer(
   "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'",
   {
     attribution:
       'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
   });
-
-// Create a baseMaps object.
-// let baseMaps = {
-//   "Street Map": street,
-//   "Topographic Map": topo
-// };
-
-// // Create an overlay object to hold our overlay.
-// let overlayMaps = {
-//   Earthquakes: earthquakes
-// };
 
 // Create our map, giving it the streetmap and earthquakes layers to display on load.
 let myMap = L.map("map", {
@@ -35,12 +16,47 @@ let myMap = L.map("map", {
 
 basemap.addTo(myMap);
 
-  // Create a layer control.
-  // Pass it our baseMaps and overlayMaps.
-  // Add the layer control to the map.
-  // L.control.layers(baseMaps, overlayMaps, {
-  //   collapsed: false
-  // }).addTo(myMap);
+// // Create a legend layer.
+// // Set up the legend.
+// let legend = L.control({ position: "bottomright" });
+// legend.onAdd = function() {
+//   let div = L.DomUtil.create("div", "info legend");
+//   let limits = [90, 70, 50, 30, 10, -10];
+//   let colors = ["#ea2c2c", "#ea822c", "#ea822c", "#eecc00", "#d4ee00", "#98ee00"];
+//   let labels = [];
+
+//   // Add the minimum and maximum.
+//   let legendInfo = "<h3>Depth</h3>" +
+//     "<div class=\"labels\">" +
+//       "<div class=\"min\">" + limits[0] + "</div>" +
+//       "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+//     "</div>";
+
+//   div.innerHTML = legendInfo;
+
+//   limits.forEach(function(limit, index) {
+//     labels.push("<i style=\"background-color: " + colors[index] + "\"></i>");
+//     div.innerHTML += "<i>" + labels.join("") + "</i>";
+//   });
+//   return div;
+//   };
+
+let legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function () {
+    let div = L.DomUtil.create('div', 'info legend');
+    let limits = [-10, 10, 30, 50, 70, 90];
+    let colors = ["#98ee00", "#d4ee00", "#eecc00", "#ee9c00", "#ea822c", "#ea2c2c"];
+    let labels = [];
+
+    for (var i = 0; i < limits.length; i++) {
+        div.innerHTML +=
+            '<div class="legend-item"><i style=background:' + colors[i] + '></i> ' +
+            limits[i] + (limits[i + 1] ? '&ndash;' + limits[i + 1] + '<br>' : '+') + '</div>';
+    }
+
+    return div;
+};
 
 
 // Store our API endpoint as queryUrl.
@@ -79,7 +95,7 @@ d3.json(link).then(function (data) {
       case depth > 70:
         return "#ea822c";
       case depth > 50:
-        return "#ea822c";
+        return "#ee9c00";
       case depth > 30:
         return "#eecc00";
       case depth > 10:
@@ -104,6 +120,5 @@ d3.json(link).then(function (data) {
       );
     }
   }).addTo(myMap);
-  // Create legend object here. Then add features to legend.
-  // Then legend.addTo(myMap)
+  legend.addTo(myMap);
 });
