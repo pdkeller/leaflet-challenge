@@ -41,17 +41,33 @@ basemap.addTo(myMap);
 //   return div;
 //   };
 
+function getColor(value) {
+  if (value = 90) {
+    return  "#ea2c2c";
+  } else if (value = 70) {
+    return "#ea822c";
+  } else if (value = 50) {
+    return "#ee9c00";
+  } else if (value = 30) {
+    return "#eecc00";
+  } else if (value = 10) {
+    return "#d4ee00";
+  } else {
+    return "#98ee00";
+  }
+}
+
 let legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function () {
     let div = L.DomUtil.create('div', 'info legend');
     let limits = [-10, 10, 30, 50, 70, 90];
-    let colors = ["#98ee00", "#d4ee00", "#eecc00", "#ee9c00", "#ea822c", "#ea2c2c"];
+    //let colors = ["#98ee00", "#d4ee00", "#eecc00", "#ee9c00", "#ea822c", "#ea2c2c"];
     let labels = [];
 
     for (var i = 0; i < limits.length; i++) {
         div.innerHTML +=
-            '<div class="legend-item"><i style=background:' + colors[i] + '></i> ' +
+            '<div class="legend-item"><i style="background:"' + getColor(limits[i]) + '></i> ' +
             limits[i] + (limits[i + 1] ? '&ndash;' + limits[i + 1] + '<br>' : '+') + '</div>';
     }
 
